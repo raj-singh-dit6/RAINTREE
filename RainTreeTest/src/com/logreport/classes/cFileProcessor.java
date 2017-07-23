@@ -1,20 +1,25 @@
 package com.logreport.classes;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 public class cFileProcessor {
 
@@ -76,6 +81,7 @@ public class cFileProcessor {
 	{
 		HashMap<String,Integer> lGetDetails=null;
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		try{
 		Date startDate = formatter.parse(pFROMDateDDMMYYY);
 		Date endDate = formatter.parse(pTODateDDMMYYY);
 
@@ -84,7 +90,11 @@ public class cFileProcessor {
 		Calendar end = Calendar.getInstance();
 		end.setTime(endDate);
 		lGetDetails=mGetDetailsByDate(start,end,new HashMap<String,Integer>());
-		return	lGetDetails;
+		}
+		catch(ParseException e){
+			throw new ParseException("Please enter date in (dd-MM-yyyy) format only",0);			
+		}
+		return lGetDetails;
 	}
 	public  String mGetFileContent(File file)throws IOException 
 	{
@@ -101,6 +111,49 @@ public class cFileProcessor {
 	      }
 	return buffer.toString();
   }
+	
+	
+	public String[] mGenerateReport(String pFromDate,String pToDate) throws ParseException, IOException
+	{	String[] lReturn=new String[2];
+		HashMap<String, Integer> lRecords = mGetDetailsByDateRange(pFromDate, pToDate);
+		Object[] objArray = lRecords.entrySet().toArray();
+		Arrays.sort(objArray, new Comparator() {
+		    public int compare(Object o1, Object o2) {
+		        return ((Map.Entry<String, Integer>) o1).getValue().compareTo(
+		               ((Map.Entry<String, Integer>) o2).getValue());
+		    }
+		});
+
+		cFilePathHandler lFilePathHandler = new cFilePathHandler();
+		File aLogFile = lFilePathHandler.mGetFileObject("Reports/Report["+pFromDate+" to "+pToDate+"].txt");
+		File aParentDirectory = aLogFile.getParentFile();
+
+		// if parent directory does not exists, then create it
+		if (aParentDirectory != null) {
+			aParentDirectory.mkdirs();
+		}
+		// if log file does not exists, then create it
+		if (aLogFile != null) {
+			aLogFile.createNewFile();
+		}
+		// true = append file
+		FileWriter lWriter = new FileWriter(aLogFile, true);
+		BufferedWriter lBufferedWriter = new BufferedWriter(lWriter);
+		lBufferedWriter.write("Date	:  " + pFromDate + "  to  " + pToDate);
+		lBufferedWriter.write("\r\n");
+		lBufferedWriter.write("ComputerName Number of Disconnects");
+		lBufferedWriter.write("\r\n");
+
+		for (Object e : objArray) {
+
+			lBufferedWriter.write(((Map.Entry<String, Integer>) e).getKey() + "   " + ((Map.Entry<String, Integer>) e).getValue());
+			lBufferedWriter.write("\r\n");
+		} 
+		lBufferedWriter.close();
+		lReturn[0]="1";
+		lReturn[1]=aParentDirectory.getPath()+"\\Report["+pFromDate+" to "+pToDate+"].txt";
+		return lReturn;
+	}
 	
 	
 }

@@ -16,7 +16,7 @@ public class cFilePathHandler
 			aFolderPath=lPropResource.getString("SourceFolderDir");
 			//System.out.println(aFolderPath);
 		}catch(Exception ex){
-			System.out.println("Resources Bundle ex cPathHandler(): "+ex);
+			System.out.println("Resources Bundle ex cFilePathHandler(): "+ex);
 			ex.printStackTrace();
 		}
 	}
