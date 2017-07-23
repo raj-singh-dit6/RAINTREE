@@ -14,8 +14,8 @@ public class test {
 
 	public static void main(String[] a) throws ParseException, IOException {
 
-		String lFromDate = "01-02-2016";
-		String lToDate = "31-12-2016";
+		String lFromDate = "05-03-2016";
+		String lToDate = "03-12-2016";
 		cFileProcessor lFileProcessor = new cFileProcessor();
 		HashMap<String, Integer> lRecords = lFileProcessor.mGetDetailsByDateRange(lFromDate, lToDate);
 		

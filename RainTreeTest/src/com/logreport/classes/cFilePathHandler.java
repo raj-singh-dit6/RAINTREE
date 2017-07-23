@@ -14,7 +14,7 @@ public class cFilePathHandler
 		PropertyResourceBundle lPropResource=(PropertyResourceBundle) ResourceBundle.getBundle("ApplicationConfig",Locale.ENGLISH);
 		try{
 			aFolderPath=lPropResource.getString("SourceFolderDir");
-			System.out.println(aFolderPath);
+			//System.out.println(aFolderPath);
 		}catch(Exception ex){
 			System.out.println("Resources Bundle ex cPathHandler(): "+ex);
 			ex.printStackTrace();
