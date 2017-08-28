@@ -1,0 +1,23 @@
+CREATE TABLE `insurance` (
+  `_id` int(10) unsigned NOT NULL,
+  `patient_id` int(10) unsigned NOT NULL,
+  `iname` varchar(40) DEFAULT NULL,
+  `from_date` date DEFAULT NULL,
+  `to_date` date DEFAULT NULL,
+  PRIMARY KEY (`_id`),
+  KEY `_idx` (`patient_id`),
+  CONSTRAINT `` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ 
+ 
+ CREATE TABLE `patient` (
+  `_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pn` varchar(11) DEFAULT NULL,
+  `first` varchar(15) DEFAULT NULL,
+  `last` varchar(25) DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
