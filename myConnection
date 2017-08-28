@@ -1,0 +1,15 @@
+<?php
+class myConnection{
+	private $servername = "localhost";
+	private $username = "root";
+	private $password = "admin";
+	private $dbname = "raintree";
+
+	public function getMyConnection
+	{
+	// Create connection
+		$conn = new mysqli($this->$servername, $this->$username, $this->$password, $this->$dbname);
+		return $conn;
+	}
+}
+?>
